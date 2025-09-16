@@ -23,6 +23,6 @@ This project was created using `bun init` in bun v1.2.22. [Bun](https://bun.com)
 
 ## Some examples
 
-* http://localhost:3000/age?a=1990-03-17|%23F75A5A&a=1990-07-29|%23FFD63A&a=2025-01-31|%236DE1D2
-* http://localhost:3000/
+* http://localhost:3000/age?a=1990-03-17|%23F75A5A&a=1990-07-29|%23FFD63A&a=2025-01-31|%236DE1D2&bg=white
+* http://localhost:3000/?bg=white
 * http://localhost:3000/?unwind=false

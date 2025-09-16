@@ -35,7 +35,7 @@ export function DailyClockView() {
 }
 
 const AgeParams = z.object({
-  a: z.array(
+  b: z.array(
     z.tuple([
       z.iso.date().pipe(z.coerce.date()),
       z.string().default("white")]
@@ -46,13 +46,12 @@ const AgeParams = z.object({
 export function AgeClockView() {
   const { maxRadius } = useOutletContext<ContextType>();
   const [searchParams] = useSearchParams()
-  const a = searchParams.getAll("a").map((e) => e.split("|"))
-  console.log(JSON.stringify(a))
-  const params = AgeParams.parse({ a })
+  const b = searchParams.getAll("b").map((e) => e.split("|"))
+  const params = AgeParams.parse({ b })
 
   return (
     <React.Fragment>
-      {params.a.map(p => <AgeClock key={p[0].toString()} birthday={p[0]} color={p[1]} maxRadius={maxRadius} />)}
+      {params.b.map(p => <AgeClock key={p[0].toString()} birthday={p[0]} color={p[1]} maxRadius={maxRadius} />)}
 
     </React.Fragment>
   )
@@ -61,6 +60,8 @@ export function AgeClockView() {
 export function App() {
   const [windowDimensions, setWindowDimensions] = React.useState(getWindowDimensions());
   const maxRadius = Math.min(windowDimensions.height, windowDimensions.width) / 2
+  const [searchParams] = useSearchParams()
+  const background = searchParams.get("bg") || "white"
 
   React.useEffect(() => {
     function handleResize() {
@@ -72,7 +73,7 @@ export function App() {
   }, []);
 
   return (
-    <div style={{ background: "black", width: "100%", height: "100vh", display: "flex" }}>
+    <div style={{ background, width: "100%", height: "100vh", display: "flex" }}>
       <svg width={maxRadius * 2} height={maxRadius * 2} style={{ background: "none", display: "block", margin: "auto" }}>
         <Outlet context={{ maxRadius }} />
       </svg>
