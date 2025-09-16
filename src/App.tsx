@@ -34,9 +34,11 @@ function getWindowDimensions() {
 }
 
 function SpiralHand({ rotationsPerDay, unitsPerRotation, currentValue, color, handColor, maxRadius = 200 }: SpiralHandT) {
+  const max = rotationsPerDay * unitsPerRotation
+  const cv = currentValue > max/2 ? max - currentValue : currentValue
   const angle = (l: number) => (Math.PI / unitsPerRotation) * 2 * l
-  const progress = (l: number) => l / (rotationsPerDay * unitsPerRotation)
-  const radius = (l: number) => progress(l) * maxRadius
+  const progress = (l: number) => (l / max / 2)
+  const radius = (l: number) => progress(l) * maxRadius * 2
 
   const spiral = d3
     .lineRadial<undefined>()
@@ -46,11 +48,11 @@ function SpiralHand({ rotationsPerDay, unitsPerRotation, currentValue, color, ha
 
   // const hand = d3.lineRadial()([[0, 0], [angle(currentValue - 1), radius(currentValue - 1)]])
   // const hand = d3.lineRadial()([[angle(currentValue - 1), radius(currentValue - 1)]])
-  const [cx,cy] = d3.pointRadial(angle(currentValue-1), radius(currentValue-1))
+  const [cx,cy] = d3.pointRadial(angle(cv-1), radius(cv-1))
 
   return (
   <React.Fragment>
-    <path stroke={color} fill="none" d={spiral({ length: currentValue })} strokeWidth={2}/>
+    <path stroke={color} fill="none" d={spiral({ length: cv })} strokeWidth={2}/>
     {/* <path stroke={handColor || color} fill="none" d={hand} strokeWidth={3}/> */}
     <circle stroke="white" fill={handColor || color} cx={cx} cy={cy} r={10} />
   </React.Fragment>)
