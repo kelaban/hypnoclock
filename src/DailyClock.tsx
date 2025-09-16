@@ -34,7 +34,7 @@ export default function DailyClock({
       rotationsPerDay={24}
       unitsPerRotation={60 * 60}
       currentValue={seconds}
-      color="#FFD63A"
+      color={minuteColor}
       maxRadius={maxRadius}
       unwind={unwind}
     />
@@ -44,7 +44,7 @@ export default function DailyClock({
       rotationsPerDay={2}
       unitsPerRotation={12 * 60}
       currentValue={minutes}
-      color="#6DE1D2"
+      color={hourColor}
       maxRadius={maxRadius}
       unwind={unwind}
     />
@@ -54,9 +54,10 @@ export default function DailyClock({
       rotationsPerDay={60 * 24}
       unitsPerRotation={60}
       currentValue={seconds}
-      color="#F75A5A"
+      color={secondColor}
       maxRadius={maxRadius}
       unwind={unwind}
+      pathParams={{ strokeWidth: 0.5 }}
     />
   );
 
