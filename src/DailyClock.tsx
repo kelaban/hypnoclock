@@ -31,7 +31,7 @@ export default function DailyClock({
 
   const MinuteHand = (
     <SpiralHand
-      rotationsPerDay={24}
+      rotationsPerPeriod={24}
       unitsPerRotation={60 * 60}
       currentValue={seconds}
       color={minuteColor}
@@ -41,7 +41,7 @@ export default function DailyClock({
   );
   const HourHand = (
     <SpiralHand
-      rotationsPerDay={2}
+      rotationsPerPeriod={2}
       unitsPerRotation={12 * 60}
       currentValue={minutes}
       color={hourColor}
@@ -51,7 +51,7 @@ export default function DailyClock({
   );
   const SecondHand = (
     <SpiralHand
-      rotationsPerDay={60 * 24}
+      rotationsPerPeriod={60 * 24}
       unitsPerRotation={60}
       currentValue={seconds}
       color={secondColor}

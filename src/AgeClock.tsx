@@ -16,7 +16,7 @@ export default function AgeClock({ birthday, color = "#F75A5A", maxRadius = 200 
     }
   }, [setNow])
 
-  const YearHand = <SpiralHand rotationsPerDay={110} unitsPerRotation={365} currentValue={day} color={color} maxRadius={maxRadius} unwind={false} />
+  const YearHand = <SpiralHand rotationsPerPeriod={110} unitsPerRotation={365} currentValue={day} color={color} maxRadius={maxRadius} unwind={false} />
 
   return (
     <g transform={`translate(${maxRadius}, ${maxRadius})`} >

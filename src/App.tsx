@@ -4,6 +4,7 @@ import React from "react";
 import AgeClock from "./AgeClock";
 import DailyClock from "./DailyClock";
 import { Outlet, useOutletContext, useSearchParams } from "react-router";
+import YearClock from "./YearClock";
 
 function getWindowDimensions() {
   const { innerWidth: width, innerHeight: height } = window;
@@ -14,6 +15,24 @@ function getWindowDimensions() {
 }
 
 type ContextType = { maxRadius: number };
+
+const YearClockParams = z.object({
+  dayColor: z.string().default("#6DE1D2"),
+  weekColor: z.string().default("#F75A5A"),
+  monthColor: z.string().default("#FFD63A")
+});
+
+export function YearClockView() {
+  const { maxRadius } = useOutletContext<ContextType>();
+  const [searchParams] = useSearchParams();
+  const params = YearClockParams.parse({
+    dayColor: searchParams.get("d") || undefined,
+    monthColor: searchParams.get("m") || undefined,
+    weekColor: searchParams.get("w") || undefined,
+  });
+
+  return <YearClock maxRadius={maxRadius} {...params} />;
+}
 
 const ClockParams = z.object({
   unwind: z.stringbool().default(true),
@@ -66,9 +85,9 @@ export function App() {
     getWindowDimensions()
   );
   const maxRadius =
-    Math.min(windowDimensions.height, windowDimensions.width) / 2;
+    (Math.min(windowDimensions.height, windowDimensions.width) / 2);
   const [searchParams] = useSearchParams();
-  const background = searchParams.get("bg") || "white";
+  const background = searchParams.get("bg") || "black";
 
   React.useEffect(() => {
     function handleResize() {
@@ -88,7 +107,7 @@ export function App() {
         height={maxRadius * 2}
         style={{ background: "none", display: "block", margin: "auto" }}
       >
-        <Outlet context={{ maxRadius }} />
+        <Outlet context={{ maxRadius: maxRadius }} />
       </svg>
     </div>
   );

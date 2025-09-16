@@ -2,7 +2,7 @@ import * as d3 from "d3";
 import React from "react";
 
 type SpiralHandT = {
-  rotationsPerDay: number;
+  rotationsPerPeriod: number;
   unitsPerRotation: number;
   currentValue: number;
   maxRadius?: number;
@@ -13,13 +13,13 @@ type SpiralHandT = {
 };
 
 export default function SpiralHand({
-  rotationsPerDay,
+  rotationsPerPeriod: rotationsPerDay,
   unitsPerRotation,
   currentValue,
   color,
   handColor,
   maxRadius = 200,
-  unwind = true,
+  unwind = false,
   pathParams = {},
 }: SpiralHandT) {
   let maxUnits = rotationsPerDay * unitsPerRotation;
