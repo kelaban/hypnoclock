@@ -1,8 +1,10 @@
 import * as d3 from "d3";
+import * as z from "zod";
 import React from "react";
 import SpiralHand from "./SpiralHand";
 import AgeClock from "./AgeClock";
 import DailyClock from "./DailyClock";
+import { Outlet, useOutletContext, useSearchParams } from "react-router";
 
 const countSeconds = (start?: Date) =>
   d3.timeSecond.count(start ? start : d3.timeDay.floor(new Date()), new Date())
@@ -17,9 +19,44 @@ function getWindowDimensions() {
 }
 
 
+type ContextType = { maxRadius: number };
 
 
+const ClockParams = z.object({
+  unwind: z.stringbool().default(true)
+})
 
+export function DailyClockView() {
+  const { maxRadius } = useOutletContext<ContextType>();
+  const [searchParams] = useSearchParams()
+  const params = ClockParams.parse({ unwind: searchParams.get("unwind") || undefined })
+
+  return <DailyClock unwind={params.unwind} maxRadius={maxRadius} />
+}
+
+const AgeParams = z.object({
+  a: z.array(
+    z.tuple([
+      z.iso.date().pipe(z.coerce.date()),
+      z.string().default("white")]
+    )
+  )
+})
+
+export function AgeClockView() {
+  const { maxRadius } = useOutletContext<ContextType>();
+  const [searchParams] = useSearchParams()
+  const a = searchParams.getAll("a").map((e) => e.split("|"))
+  console.log(JSON.stringify(a))
+  const params = AgeParams.parse({ a })
+
+  return (
+    <React.Fragment>
+      {params.a.map(p => <AgeClock key={p[0].toString()} birthday={p[0]} color={p[1]} maxRadius={maxRadius} />)}
+
+    </React.Fragment>
+  )
+}
 
 export function App() {
   const [windowDimensions, setWindowDimensions] = React.useState(getWindowDimensions());
@@ -34,16 +71,10 @@ export function App() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-
-
-
   return (
     <div style={{ background: "black", width: "100%", height: "100vh", display: "flex" }}>
       <svg width={maxRadius * 2} height={maxRadius * 2} style={{ background: "none", display: "block", margin: "auto" }}>
-        <DailyClock unwind maxRadius={maxRadius} />
-        {/* <AgeClock birthday={new Date("1990-03-17")} maxRadius={maxRadius} />
-        <AgeClock birthday={new Date("1990-07-29")} maxRadius={maxRadius} color={"#FFD63A"}/>
-        <AgeClock birthday={new Date("2025-01-31")} maxRadius={maxRadius} color={"#6DE1D2"}/> */}
+        <Outlet context={{ maxRadius }} />
       </svg>
     </div>
   );
