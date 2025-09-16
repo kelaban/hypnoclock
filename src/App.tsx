@@ -4,25 +4,14 @@ import React from "react";
 const countSeconds = (start?: Date) =>
   d3.timeSecond.count(start ? start : d3.timeDay.floor(new Date()), new Date())
 
-const countMinutes = () =>
-  d3.timeMinute.count(d3.timeDay.floor(new Date()), new Date())
-
-const countHours = () =>
-  d3.timeHour.count(d3.timeDay.floor(new Date()), new Date())
-
-const start = d3.timeSecond.offset(new Date(), -300)
-
-const maxRadius = 150
-const maxMinutes = (60 * 24)
-const maxHours = 24
-
 type SpiralHandT = {
   rotationsPerDay: number,
   unitsPerRotation: number,
   currentValue: number,
   maxRadius?: number,
   color: string,
-  handColor?: string
+  handColor?: string,
+  unwind?: boolean,
 }
 
 function getWindowDimensions() {
@@ -33,12 +22,65 @@ function getWindowDimensions() {
   };
 }
 
-function SpiralHand({ rotationsPerDay, unitsPerRotation, currentValue, color, handColor, maxRadius = 200 }: SpiralHandT) {
-  const max = rotationsPerDay * unitsPerRotation
-  const cv = currentValue > max/2 ? max - currentValue : currentValue
-  const angle = (l: number) => (Math.PI / unitsPerRotation) * 2 * l
-  const progress = (l: number) => (l / max / 2)
-  const radius = (l: number) => progress(l) * maxRadius * 2
+function StandardClock({ unwind = false, maxRadius }: { unwind: boolean, maxRadius: number }) {
+  const [seconds, setSeconds] = React.useState<number>(countSeconds() + 1);
+
+  React.useEffect(() => {
+    const t = d3.interval((elapsed) => {
+      setSeconds(countSeconds() + 1)
+    }, 100)
+
+    return () => {
+      t.stop()
+    }
+  }, [setSeconds])
+
+  const minutes = Math.floor(seconds / 60)
+  const MinuteHand = <SpiralHand rotationsPerDay={24} unitsPerRotation={60 * 60} currentValue={seconds} color="#FFD63A" maxRadius={maxRadius} unwind={unwind} />
+  const HourHand = <SpiralHand rotationsPerDay={2} unitsPerRotation={12 * 60} currentValue={minutes} color="#6DE1D2" maxRadius={maxRadius} unwind={unwind} />
+  const SecondHand = <SpiralHand rotationsPerDay={60 * 24} unitsPerRotation={60} currentValue={seconds} color="#F75A5A" maxRadius={maxRadius} unwind={unwind} />
+
+  return (
+    <g transform={`translate(${maxRadius}, ${maxRadius})`} >
+      {SecondHand}
+      {MinuteHand}
+      {HourHand}
+    </g>
+  )
+}
+
+function AgeClock({ birthday, color = "#F75A5A", maxRadius = 200 }: { birthday: Date, maxRadius: number, color?: string }) {
+  const [now, setNow] = React.useState<Date>(new Date())
+  const day = d3.timeDay.count(birthday, now)
+
+  React.useEffect(() => {
+    const t = d3.interval((elapsed) => {
+      setNow(new Date())
+    }, 1000)
+
+    return () => {
+      t.stop()
+    }
+  }, [setNow])
+
+  const YearHand = <SpiralHand rotationsPerDay={110} unitsPerRotation={365} currentValue={day} color={color} maxRadius={maxRadius} unwind={false} />
+
+  return (
+    <g transform={`translate(${maxRadius}, ${maxRadius})`} >
+      {YearHand}
+    </g>
+  )
+}
+
+function SpiralHand({ rotationsPerDay, unitsPerRotation, currentValue, color, handColor, maxRadius = 200, unwind = true }: SpiralHandT) {
+  let maxUnits = rotationsPerDay * unitsPerRotation
+  let value = currentValue
+  if (unwind && currentValue > maxUnits / 2) {
+    value = maxUnits - value
+    maxUnits /= 2
+  }
+  const angle = d3.scaleLinear().range([0, 2 * Math.PI]).domain([0, unitsPerRotation])
+  const radius = d3.scaleLinear().range([0, maxRadius]).domain([0, maxUnits])
 
   const spiral = d3
     .lineRadial<undefined>()
@@ -46,23 +88,17 @@ function SpiralHand({ rotationsPerDay, unitsPerRotation, currentValue, color, ha
     .radius((d, i) => radius(i))
     .curve(d3.curveBasis);
 
-  // const hand = d3.lineRadial()([[0, 0], [angle(currentValue - 1), radius(currentValue - 1)]])
-  // const hand = d3.lineRadial()([[angle(currentValue - 1), radius(currentValue - 1)]])
-  const [cx,cy] = d3.pointRadial(angle(cv-1), radius(cv-1))
+  const [cx, cy] = d3.pointRadial(angle(value - 1), radius(value - 1))
 
   return (
-  <React.Fragment>
-    <path stroke={color} fill="none" d={spiral({ length: cv })} strokeWidth={2}/>
-    {/* <path stroke={handColor || color} fill="none" d={hand} strokeWidth={3}/> */}
-    <circle stroke="white" fill={handColor || color} cx={cx} cy={cy} r={10} />
-  </React.Fragment>)
+    <React.Fragment>
+      <path stroke={color} fill="none" d={spiral({ length: value })} strokeWidth={2} />
+      <circle stroke="white" fill={handColor || color} cx={cx} cy={cy} r={10} />
+    </React.Fragment>)
 }
 
 
 export function App() {
-  const [minutes, setMinutes] = React.useState<number>(countMinutes()+1);
-  const [hours, setHours] = React.useState<number>(countHours()+1);
-  const [seconds, setSeconds] = React.useState<number>(countSeconds()+1);
   const [windowDimensions, setWindowDimensions] = React.useState(getWindowDimensions());
   const maxRadius = Math.min(windowDimensions.height, windowDimensions.width) / 2
 
@@ -77,33 +113,14 @@ export function App() {
 
 
 
-  React.useEffect(() => {
-    const t = d3.interval((elapsed) => {
-      setMinutes(countMinutes()+1)
-      setHours(countHours()+1)
-      setSeconds(countSeconds()+1)
-    }, 100)
-
-    return () => {
-      t.stop()
-    }
-  }, [setMinutes, setHours])
-
-  // const MinuteHand = <SpiralHand rotationsPerDay={24} unitsPerRotation={60} currentValue={minutes} color="red"/>
-  // const HourHand = <SpiralHand rotationsPerDay={2} unitsPerRotation={12} currentValue={hours} color="yellow"/>
-  // const SecondHand = <SpiralHand rotationsPerDay={60*24} unitsPerRotation={60} currentValue={seconds} color="purple" handColor="white"/>
-  const MinuteHand = <SpiralHand rotationsPerDay={24} unitsPerRotation={60} currentValue={minutes} color="#FFD63A" maxRadius={maxRadius}/>
-  const HourHand = <SpiralHand rotationsPerDay={2} unitsPerRotation={12*60} currentValue={minutes} color="#6DE1D2" maxRadius={maxRadius}/>
-  const SecondHand = <SpiralHand rotationsPerDay={60*24} unitsPerRotation={60} currentValue={seconds} color="#F75A5A" maxRadius={maxRadius}/>
 
   return (
-    <div style={{ background: "black", width: "100%", height:"100vh", display: "flex" }}>
-      <svg width={maxRadius*2} height={maxRadius*2} style={{ background: "none", display: "block", margin:"auto" }}>
-        <g transform={`translate(${maxRadius}, ${maxRadius})`} >
-          {SecondHand}
-          {MinuteHand}
-          {HourHand}
-        </g>
+    <div style={{ background: "black", width: "100%", height: "100vh", display: "flex" }}>
+      <svg width={maxRadius * 2} height={maxRadius * 2} style={{ background: "none", display: "block", margin: "auto" }}>
+        {/* <StandardClock unwind maxRadius={maxRadius} /> */}
+        <AgeClock birthday={new Date("1990-03-17")} maxRadius={maxRadius} />
+        <AgeClock birthday={new Date("1990-07-29")} maxRadius={maxRadius} color={"#FFD63A"}/>
+        <AgeClock birthday={new Date("2025-01-31")} maxRadius={maxRadius} color={"#6DE1D2"}/>
       </svg>
     </div>
   );
