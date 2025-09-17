@@ -9,6 +9,7 @@ type SpiralHandT = {
   color: string;
   handColor?: string;
   unwind?: boolean;
+  weight?: number;
   pathParams?: React.SVGProps<SVGPathElement>;
 };
 
@@ -20,6 +21,7 @@ export default function SpiralHand({
   handColor,
   maxRadius = 200,
   unwind = false,
+  weight = 0,
   pathParams = {},
 }: SpiralHandT) {
   let maxUnits = rotationsPerDay * unitsPerRotation;
@@ -51,7 +53,7 @@ export default function SpiralHand({
         stroke={color}
         fill="none"
         d={spiral({ length: value })}
-        strokeWidth={2}
+        strokeWidth={weight}
         {...pathParams}
       />
       <circle stroke="white" fill={handColor || color} cx={cx} cy={cy} r={10} />

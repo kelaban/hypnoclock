@@ -18,8 +18,9 @@ type ContextType = { maxRadius: number };
 
 const YearClockParams = z.object({
   dayColor: z.string().default("#6DE1D2"),
+  dayWeight: z.number().default(3),
   weekColor: z.string().default("#F75A5A"),
-  monthColor: z.string().default("#FFD63A")
+  monthColor: z.string().default("#FFD63A"),
 });
 
 export function YearClockView() {
@@ -38,7 +39,7 @@ const ClockParams = z.object({
   unwind: z.stringbool().default(false),
   minuteColor: z.string().default("#FFD63A"),
   hourColor: z.string().default("#6DE1D2"),
-  secondColor: z.string().default("#F75A5A")
+  secondColor: z.string().default("#F75A5A"),
 });
 
 export function DailyClockView() {
@@ -48,7 +49,7 @@ export function DailyClockView() {
     unwind: searchParams.get("unwind") || undefined,
     minuteColor: searchParams.get("m") || undefined,
     hourColor: searchParams.get("h") || undefined,
-    secondColor: searchParams.get("s") || undefined
+    secondColor: searchParams.get("s") || undefined,
   });
 
   return <DailyClock maxRadius={maxRadius} {...params} />;
@@ -58,17 +59,16 @@ const AgeParams = z.object({
   b: z.array(
     z.tuple([z.iso.date().pipe(z.coerce.date()), z.string().default("white")])
   ),
-  ma: z.string().default("100").pipe(z.coerce.number())
-
+  ma: z.string().default("100").pipe(z.coerce.number()),
 });
 
 export function AgeClockView() {
   const { maxRadius } = useOutletContext<ContextType>();
   const [searchParams] = useSearchParams();
   const b = searchParams.getAll("b").map((e) => e.split("|"));
-  const ma = searchParams.get("ma") || undefined
+  const ma = searchParams.get("ma") || undefined;
   const params = AgeParams.parse({ b, ma });
-  console.log(params)
+  console.log(params);
 
   return (
     <React.Fragment>
@@ -90,7 +90,7 @@ export function App() {
     getWindowDimensions()
   );
   const maxRadius =
-    (Math.min(windowDimensions.height, windowDimensions.width) / 2);
+    Math.min(windowDimensions.height, windowDimensions.width) / 2;
   const [searchParams] = useSearchParams();
   const background = searchParams.get("bg") || "black";
 
