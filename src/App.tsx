@@ -58,13 +58,16 @@ const AgeParams = z.object({
   b: z.array(
     z.tuple([z.iso.date().pipe(z.coerce.date()), z.string().default("white")])
   ),
+  ma: z.string().default("100").pipe(z.coerce.number())
 });
 
 export function AgeClockView() {
   const { maxRadius } = useOutletContext<ContextType>();
   const [searchParams] = useSearchParams();
   const b = searchParams.getAll("b").map((e) => e.split("|"));
-  const params = AgeParams.parse({ b });
+  const ma = searchParams.get("ma") || undefined
+  const params = AgeParams.parse({ b, ma });
+  console.log(params)
 
   return (
     <React.Fragment>
@@ -74,6 +77,7 @@ export function AgeClockView() {
           birthday={p[0]}
           color={p[1]}
           maxRadius={maxRadius}
+          maxAge={params.ma}
         />
       ))}
     </React.Fragment>
