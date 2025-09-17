@@ -35,7 +35,7 @@ export function YearClockView() {
 }
 
 const ClockParams = z.object({
-  unwind: z.stringbool().default(true),
+  unwind: z.stringbool().default(false),
   minuteColor: z.string().default("#FFD63A"),
   hourColor: z.string().default("#6DE1D2"),
   secondColor: z.string().default("#F75A5A")
@@ -59,6 +59,7 @@ const AgeParams = z.object({
     z.tuple([z.iso.date().pipe(z.coerce.date()), z.string().default("white")])
   ),
   ma: z.string().default("100").pipe(z.coerce.number())
+
 });
 
 export function AgeClockView() {

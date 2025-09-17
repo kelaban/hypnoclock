@@ -15,6 +15,7 @@ export default function YearClock({
 }) {
   const [now, setNow] = React.useState<Date>(new Date());
   const days = d3.timeDay.count(d3.timeYear.floor(now), now) + 1;
+  const hours = d3.timeHour.count(d3.timeYear.floor(now), now) + 1;
   const week = d3.timeWeek.count(d3.timeYear.floor(now), now) + 1;
 
   React.useEffect(() => {
@@ -50,8 +51,8 @@ export default function YearClock({
   const WeekHand = (
     <SpiralHand
       rotationsPerPeriod={52}
-      unitsPerRotation={365 / 52}
-      currentValue={days}
+      unitsPerRotation={(365 / 52) * 24}
+      currentValue={hours}
       color={weekColor}
       maxRadius={maxRadius}
     />
