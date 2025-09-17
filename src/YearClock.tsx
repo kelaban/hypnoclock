@@ -3,15 +3,21 @@ import React from "react";
 import SpiralHand from "./SpiralHand";
 
 export default function YearClock({
-  dayColor,
-  monthColor,
   weekColor,
+  weekWeight,
+  monthColor,
+  monthWeight,
+  yearColor,
+  yearWeight,
   maxRadius,
 }: {
   maxRadius: number;
-  dayColor: string;
-  monthColor: string;
   weekColor: string;
+  weekWeight: number;
+  monthColor: string;
+  monthWeight: number;
+  yearColor: string;
+  yearWeight: number;
 }) {
   const [now, setNow] = React.useState<Date>(new Date());
   const days = d3.timeDay.count(d3.timeYear.floor(now), now) + 1;
@@ -28,26 +34,6 @@ export default function YearClock({
     };
   }, [setNow]);
 
-  const DayHand = (
-    <SpiralHand
-      unitsPerRotation={365 / 12}
-      rotationsPerPeriod={12}
-      currentValue={days}
-      color={dayColor}
-      maxRadius={maxRadius}
-    />
-  );
-
-  const MonthHand = (
-    <SpiralHand
-      rotationsPerPeriod={1}
-      unitsPerRotation={52}
-      currentValue={week}
-      color={monthColor}
-      maxRadius={maxRadius}
-    />
-  );
-
   const WeekHand = (
     <SpiralHand
       rotationsPerPeriod={52}
@@ -55,14 +41,37 @@ export default function YearClock({
       currentValue={hours}
       color={weekColor}
       maxRadius={maxRadius}
+      pathParams={{ strokeWidth: weekWeight }}
+    />
+  );
+
+  const MonthHand = (
+    <SpiralHand
+      unitsPerRotation={365 / 12}
+      rotationsPerPeriod={12}
+      currentValue={days}
+      color={monthColor}
+      maxRadius={maxRadius}
+      pathParams={{ strokeWidth: monthWeight }}
+    />
+  );
+
+  const YearHand = (
+    <SpiralHand
+      rotationsPerPeriod={1}
+      unitsPerRotation={52}
+      currentValue={week}
+      color={yearColor}
+      maxRadius={maxRadius}
+      pathParams={{ strokeWidth: yearWeight }}
     />
   );
 
   return (
     <g transform={`translate(${maxRadius}, ${maxRadius})`}>
       {WeekHand}
-      {DayHand}
       {MonthHand}
+      {YearHand}
     </g>
   );
 }

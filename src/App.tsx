@@ -17,19 +17,24 @@ function getWindowDimensions() {
 type ContextType = { maxRadius: number };
 
 const YearClockParams = z.object({
-  dayColor: z.string().default("#6DE1D2"),
-  dayWeight: z.number().default(3),
   weekColor: z.string().default("#F75A5A"),
+  weekWeight: z.string().default("2").pipe(z.coerce.number()),
   monthColor: z.string().default("#FFD63A"),
+  monthWeight: z.string().default("2").pipe(z.coerce.number()),
+  yearColor: z.string().default("#6DE1D2"),
+  yearWeight: z.string().default("2").pipe(z.coerce.number()),
 });
 
 export function YearClockView() {
   const { maxRadius } = useOutletContext<ContextType>();
   const [searchParams] = useSearchParams();
   const params = YearClockParams.parse({
-    dayColor: searchParams.get("d") || undefined,
-    monthColor: searchParams.get("m") || undefined,
     weekColor: searchParams.get("w") || undefined,
+    weekWeight: searchParams.get("ww") || undefined,
+    monthColor: searchParams.get("m") || undefined,
+    monthWeight: searchParams.get("mw") || undefined,
+    yearColor: searchParams.get("y") || undefined,
+    yearWeight: searchParams.get("yw") || undefined,
   });
 
   return <YearClock maxRadius={maxRadius} {...params} />;
