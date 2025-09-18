@@ -28,6 +28,7 @@ export default function SpiralHand({
 }: SpiralHandT) {
   let maxUnits = rotationsPerDay * unitsPerRotation;
   let value = currentValue;
+  let padding = 20;
 
   if (unwind && currentValue > maxUnits / 2) {
     value = maxUnits - value;
@@ -39,7 +40,7 @@ export default function SpiralHand({
     .range([0, 2 * Math.PI])
     .domain([0, unitsPerRotation]);
 
-  const radius = d3.scaleLinear().range([0, maxRadius]).domain([0, maxUnits]);
+  const radius = d3.scaleLinear().range([0, maxRadius - padding]).domain([0, maxUnits]);
 
   const spiral = d3
     .lineRadial<undefined>()
@@ -66,7 +67,7 @@ export default function SpiralHand({
       >
         <circle stroke="white" fill={handColor || color} cx={0} cy={0} r={cR} />
         <text
-          transform={`rotate(90) translate(-${tX}, -${cR * 2 + 5})`}
+          transform={`rotate(90) translate(-${tX}, -${cR * 2})`}
           textAnchor={"middle"}
           fill={color}
           dy={"0.35em"}
