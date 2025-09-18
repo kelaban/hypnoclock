@@ -2,6 +2,8 @@ import * as d3 from "d3";
 import React from "react";
 import SpiralHand from "./SpiralHand";
 
+const zeroPad = d3.format("02d")
+
 export default function DailyClock({
   unwind = false,
   minuteColor,
@@ -18,6 +20,7 @@ export default function DailyClock({
   const [now, setNow] = React.useState<Date>(new Date());
   const seconds = d3.timeSecond.count(d3.timeDay.floor(now), now);
   const minutes = d3.timeMinute.count(d3.timeDay.floor(now), now);
+  const hours = d3.timeHour.count(d3.timeDay.floor(now), now);
 
   React.useEffect(() => {
     const t = d3.interval((elapsed) => {
@@ -37,6 +40,7 @@ export default function DailyClock({
       color={minuteColor}
       maxRadius={maxRadius}
       unwind={unwind}
+      valueFmt={(value) => zeroPad(Math.floor(value / 60) % 60)}
     />
   );
   const HourHand = (
@@ -47,6 +51,7 @@ export default function DailyClock({
       color={hourColor}
       maxRadius={maxRadius}
       unwind={unwind}
+      valueFmt={(value) => zeroPad(Math.floor(value / 60) % 12)}
     />
   );
   const SecondHand = (
@@ -58,6 +63,7 @@ export default function DailyClock({
       maxRadius={maxRadius}
       unwind={unwind}
       pathParams={{ strokeWidth: 0.5 }}
+      valueFmt={(value) => zeroPad(value % 60)}
     />
   );
 
