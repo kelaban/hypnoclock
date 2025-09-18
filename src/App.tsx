@@ -123,7 +123,7 @@ export function App() {
         height={maxRadius * 2}
         style={{ background: "none", display: "block", margin: "auto" }}
       >
-        <Outlet context={{ maxRadius: maxRadius - 50 }} />
+        <Outlet context={{ maxRadius: maxRadius }} />
       </svg>
     </div>
   );
