@@ -43,7 +43,7 @@ export default function YearClock({
       currentValue={hours}
       color={weekColor}
       maxRadius={maxRadius}
-      pathParams={{ strokeWidth: 0.5 }}
+      pathParams={{ strokeWidth: 2 }}
       valueFmt={(value) => d3.timeFormat("%I:%M")(new Date())}
       labelSize={labelSize}
     />

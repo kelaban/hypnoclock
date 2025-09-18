@@ -22,7 +22,6 @@ export default function DailyClock({
   const [now, setNow] = React.useState<Date>(new Date());
   const seconds = d3.timeSecond.count(d3.timeDay.floor(now), now);
   const minutes = d3.timeMinute.count(d3.timeDay.floor(now), now);
-  const hours = d3.timeHour.count(d3.timeDay.floor(now), now);
 
   React.useEffect(() => {
     const t = d3.interval((elapsed) => {
@@ -66,7 +65,7 @@ export default function DailyClock({
       color={secondColor}
       maxRadius={maxRadius}
       unwind={unwind}
-      pathParams={{ strokeWidth: 0.5 }}
+      pathParams={{ strokeWidth: 1 }}
       valueFmt={(value) => zeroPad(value % 60)}
       labelSize={labelSize}
     />

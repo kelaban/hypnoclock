@@ -18,7 +18,7 @@ type ContextType = { maxRadius: number };
 
 const YearClockParams = z.object({
   weekColor: z.string().default("black"),
-  weekWeight: z.string().default("3").pipe(z.coerce.number()),
+  weekWeight: z.string().default("0.2").pipe(z.coerce.number()),
   monthColor: z.string().default("red"),
   monthWeight: z.string().default("5").pipe(z.coerce.number()),
   yearColor: z.string().default("brown"),
