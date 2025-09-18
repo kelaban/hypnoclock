@@ -36,15 +36,15 @@ export default function YearClock({
     };
   }, [setNow]);
 
-  const WeekHand = (
+  const DayHand = (
     <SpiralHand
-      rotationsPerPeriod={52}
-      unitsPerRotation={(365 / 52) * 24}
+      rotationsPerPeriod={365}
+      unitsPerRotation={24}
       currentValue={hours}
       color={weekColor}
       maxRadius={maxRadius}
-      pathParams={{ strokeWidth: weekWeight }}
-      valueFmt={(value) => "week " + d3.timeFormat("%V")(new Date())}
+      pathParams={{ strokeWidth: 0.5 }}
+      valueFmt={(value) => d3.timeFormat("%I:%M")(new Date())}
       labelSize={labelSize}
     />
   );
@@ -77,7 +77,7 @@ export default function YearClock({
 
   return (
     <g transform={`translate(${maxRadius}, ${maxRadius})`}>
-      {WeekHand}
+      {DayHand}
       {MonthHand}
       {YearHand}
     </g>
