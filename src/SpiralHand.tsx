@@ -10,7 +10,7 @@ type SpiralHandT = {
   handColor?: string;
   unwind?: boolean;
   pathParams?: React.SVGProps<SVGPathElement>;
-  valueFmt?: (currentValue: number) => string
+  valueFmt?: (currentValue: number) => string;
 };
 
 export default function SpiralHand({
@@ -45,10 +45,10 @@ export default function SpiralHand({
     .radius((d, i) => radius(i))
     .curve(d3.curveBasis);
 
-  const cAngle = angle(value - 1) % (2 * Math.PI)
-  const cRadius = radius(value - 1)
-  const cR = 10
-  const tX = cR + 4
+  const cAngle = angle(value - 1) % (2 * Math.PI);
+  const cRadius = radius(value - 1);
+  const cR = 10;
+  const tX = cR + 4;
 
   return (
     <React.Fragment>
@@ -59,10 +59,14 @@ export default function SpiralHand({
         strokeWidth={2}
         {...pathParams}
       />
-      <g transform={`rotate(${cAngle * 180 / Math.PI - 90})translate(${cRadius})`}>
+      <g
+        transform={`rotate(${(cAngle * 180) / Math.PI - 90})translate(${cRadius})`}
+      >
         <circle stroke="white" fill={handColor || color} cx={0} cy={0} r={cR} />
         <text
-          transform={cAngle > Math.PI ? `rotate(180) translate(-${tX * 2})` : ""}
+          transform={
+            cAngle > Math.PI ? `rotate(180) translate(-${tX * 2})` : ""
+          }
           textAnchor={cAngle > Math.PI ? "end" : "start"}
           fill={color}
           dy={"0.35em"}

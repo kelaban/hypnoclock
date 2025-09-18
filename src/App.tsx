@@ -62,7 +62,7 @@ export function DailyClockView() {
 
 const AgeParams = z.object({
   b: z.array(
-    z.tuple([z.iso.date().pipe(z.coerce.date()), z.string().default("white")])
+    z.tuple([z.iso.date().pipe(z.coerce.date()), z.string().default("white")]),
   ),
   ma: z.string().default("100").pipe(z.coerce.number()),
 });
@@ -92,7 +92,7 @@ export function AgeClockView() {
 
 export function App() {
   const [windowDimensions, setWindowDimensions] = React.useState(
-    getWindowDimensions()
+    getWindowDimensions(),
   );
   const maxRadius =
     Math.min(windowDimensions.height, windowDimensions.width) / 2;

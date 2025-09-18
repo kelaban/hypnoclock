@@ -11,17 +11,16 @@ export default function AgeClock({
   birthday: Date;
   maxRadius: number;
   color?: string;
-  maxAge?: number
+  maxAge?: number;
 }) {
   const [now, setNow] = React.useState<Date>(new Date());
-  const [max, setMax] = React.useState<number>(1)
+  const [max, setMax] = React.useState<number>(1);
   const day = d3.timeDay.count(birthday, now);
 
   React.useEffect(() => {
     const t = d3.interval((elapsed) => {
       setNow(new Date());
     }, 1000);
-
 
     return () => {
       t.stop();

@@ -2,7 +2,7 @@ import * as d3 from "d3";
 import React from "react";
 import SpiralHand from "./SpiralHand";
 
-const zeroPad = d3.format("02d")
+const zeroPad = d3.format("02d");
 
 export default function DailyClock({
   unwind = false,
