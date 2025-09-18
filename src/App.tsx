@@ -17,13 +17,13 @@ function getWindowDimensions() {
 type ContextType = { maxRadius: number };
 
 const YearClockParams = z.object({
-  weekColor: z.string().default("#F75A5A"),
-  weekWeight: z.string().default("2").pipe(z.coerce.number()),
-  monthColor: z.string().default("#FFD63A"),
-  monthWeight: z.string().default("2").pipe(z.coerce.number()),
-  yearColor: z.string().default("#6DE1D2"),
-  yearWeight: z.string().default("2").pipe(z.coerce.number()),
-  labelSize: z.string().default("25").pipe(z.coerce.number()),
+  weekColor: z.string().default("black"),
+  weekWeight: z.string().default("3").pipe(z.coerce.number()),
+  monthColor: z.string().default("red"),
+  monthWeight: z.string().default("5").pipe(z.coerce.number()),
+  yearColor: z.string().default("brown"),
+  yearWeight: z.string().default("7").pipe(z.coerce.number()),
+  labelSize: z.string().default("15").pipe(z.coerce.number()),
 });
 
 export function YearClockView() {
@@ -47,7 +47,7 @@ const ClockParams = z.object({
   minuteColor: z.string().default("#FFD63A"),
   hourColor: z.string().default("#6DE1D2"),
   secondColor: z.string().default("#F75A5A"),
-  labelSize: z.string().default("25").pipe(z.coerce.number()),
+  labelSize: z.string().default("15").pipe(z.coerce.number()),
 });
 
 export function DailyClockView() {
@@ -103,7 +103,7 @@ export function App() {
   const maxRadius =
     Math.min(windowDimensions.height, windowDimensions.width) / 2;
   const [searchParams] = useSearchParams();
-  const background = searchParams.get("bg") || "black";
+  const background = searchParams.get("bg") || "white";
 
   React.useEffect(() => {
     function handleResize() {
@@ -123,7 +123,7 @@ export function App() {
         height={maxRadius * 2}
         style={{ background: "none", display: "block", margin: "auto" }}
       >
-        <Outlet context={{ maxRadius: maxRadius }} />
+        <Outlet context={{ maxRadius: maxRadius - 50 }} />
       </svg>
     </div>
   );

@@ -62,18 +62,19 @@ export default function SpiralHand({
         {...pathParams}
       />
       <g
-        transform={`rotate(${(cAngle * 180) / Math.PI - 90})translate(${cRadius})`}
+        transform={`rotate(${(cAngle * 180) / Math.PI - 90}) translate(${cRadius})`}
       >
         <circle stroke="white" fill={handColor || color} cx={0} cy={0} r={cR} />
         <text
-          transform={
-            cAngle > Math.PI ? `rotate(180) translate(-${tX * 2})` : ""
-          }
-          textAnchor={cAngle > Math.PI ? "end" : "start"}
+          transform={`rotate(90) translate(-${tX}, -${cR * 2 + 5})`}
+          textAnchor={"middle"}
           fill={color}
           dy={"0.35em"}
           x={tX}
-          style={{ fontSize: labelSize }}
+          style={{
+            fontSize: labelSize,
+            fontFamily: "Zalando Sans Expanded",
+          }}
         >
           {valueFmt && valueFmt(currentValue)}
         </text>
