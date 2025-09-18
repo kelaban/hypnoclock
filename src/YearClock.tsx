@@ -42,6 +42,7 @@ export default function YearClock({
       color={weekColor}
       maxRadius={maxRadius}
       pathParams={{ strokeWidth: weekWeight }}
+      valueFmt={(value) => "week " + d3.timeFormat("%V")(new Date())}
     />
   );
 
@@ -65,18 +66,6 @@ export default function YearClock({
       color={yearColor}
       maxRadius={maxRadius}
       valueFmt={(value) => "" + d3.timeFormat("%B")(new Date()).toLowerCase()}
-    />
-  );
-
-  const WeekHand = (
-    <SpiralHand
-      rotationsPerPeriod={52}
-      unitsPerRotation={(365 / 52) * 24}
-      currentValue={hours}
-      color={weekColor}
-      maxRadius={maxRadius}
-      valueFmt={(value) => "week " + d3.timeFormat("%V")(new Date())}
-      pathParams={{ strokeWidth: yearWeight }}
     />
   );
 
