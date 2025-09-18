@@ -11,6 +11,7 @@ type SpiralHandT = {
   unwind?: boolean;
   pathParams?: React.SVGProps<SVGPathElement>;
   valueFmt?: (currentValue: number) => string;
+  labelSize?: number;
 };
 
 export default function SpiralHand({
@@ -23,6 +24,7 @@ export default function SpiralHand({
   unwind = false,
   pathParams = {},
   valueFmt = undefined,
+  labelSize = 25,
 }: SpiralHandT) {
   let maxUnits = rotationsPerDay * unitsPerRotation;
   let value = currentValue;
@@ -71,6 +73,7 @@ export default function SpiralHand({
           fill={color}
           dy={"0.35em"}
           x={tX}
+          style={{ fontSize: labelSize }}
         >
           {valueFmt && valueFmt(currentValue)}
         </text>

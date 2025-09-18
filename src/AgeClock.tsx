@@ -7,11 +7,13 @@ export default function AgeClock({
   color = "#F75A5A",
   maxAge = 100,
   maxRadius = 200,
+  labelSize = 25,
 }: {
   birthday: Date;
   maxRadius: number;
   color?: string;
   maxAge?: number;
+  labelSize?: number;
 }) {
   const [now, setNow] = React.useState<Date>(new Date());
   const [max, setMax] = React.useState<number>(1);
@@ -35,6 +37,7 @@ export default function AgeClock({
       color={color}
       maxRadius={maxRadius}
       unwind={false}
+      labelSize={labelSize}
     />
   );
 

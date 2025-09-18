@@ -10,6 +10,7 @@ export default function YearClock({
   yearColor,
   yearWeight,
   maxRadius,
+  labelSize,
 }: {
   maxRadius: number;
   weekColor: string;
@@ -18,6 +19,7 @@ export default function YearClock({
   monthWeight: number;
   yearColor: string;
   yearWeight: number;
+  labelSize: number;
 }) {
   const [now, setNow] = React.useState<Date>(new Date());
   const days = d3.timeDay.count(d3.timeYear.floor(now), now) + 1;
@@ -43,6 +45,7 @@ export default function YearClock({
       maxRadius={maxRadius}
       pathParams={{ strokeWidth: weekWeight }}
       valueFmt={(value) => "week " + d3.timeFormat("%V")(new Date())}
+      labelSize={labelSize}
     />
   );
 
@@ -55,6 +58,7 @@ export default function YearClock({
       maxRadius={maxRadius}
       valueFmt={(value) => "" + d3.timeFormat("%d")(new Date())}
       pathParams={{ strokeWidth: monthWeight }}
+      labelSize={labelSize}
     />
   );
 
@@ -66,6 +70,8 @@ export default function YearClock({
       color={yearColor}
       maxRadius={maxRadius}
       valueFmt={(value) => "" + d3.timeFormat("%B")(new Date()).toLowerCase()}
+      pathParams={{ strokeWidth: yearWeight }}
+      labelSize={labelSize}
     />
   );
 

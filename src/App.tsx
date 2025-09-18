@@ -23,6 +23,7 @@ const YearClockParams = z.object({
   monthWeight: z.string().default("2").pipe(z.coerce.number()),
   yearColor: z.string().default("#6DE1D2"),
   yearWeight: z.string().default("2").pipe(z.coerce.number()),
+  labelSize: z.string().default("25").pipe(z.coerce.number()),
 });
 
 export function YearClockView() {
@@ -35,6 +36,7 @@ export function YearClockView() {
     monthWeight: searchParams.get("mw") || undefined,
     yearColor: searchParams.get("y") || undefined,
     yearWeight: searchParams.get("yw") || undefined,
+    labelSize: searchParams.get("ls") || undefined,
   });
 
   return <YearClock maxRadius={maxRadius} {...params} />;
@@ -45,6 +47,7 @@ const ClockParams = z.object({
   minuteColor: z.string().default("#FFD63A"),
   hourColor: z.string().default("#6DE1D2"),
   secondColor: z.string().default("#F75A5A"),
+  labelSize: z.string().default("25").pipe(z.coerce.number()),
 });
 
 export function DailyClockView() {
@@ -55,6 +58,7 @@ export function DailyClockView() {
     minuteColor: searchParams.get("m") || undefined,
     hourColor: searchParams.get("h") || undefined,
     secondColor: searchParams.get("s") || undefined,
+    labelSize: searchParams.get("ls") || undefined,
   });
 
   return <DailyClock maxRadius={maxRadius} {...params} />;
@@ -62,9 +66,10 @@ export function DailyClockView() {
 
 const AgeParams = z.object({
   b: z.array(
-    z.tuple([z.iso.date().pipe(z.coerce.date()), z.string().default("white")]),
+    z.tuple([z.iso.date().pipe(z.coerce.date()), z.string().default("white")])
   ),
   ma: z.string().default("100").pipe(z.coerce.number()),
+  ls: z.string().default("25").pipe(z.coerce.number()),
 });
 
 export function AgeClockView() {
@@ -72,8 +77,8 @@ export function AgeClockView() {
   const [searchParams] = useSearchParams();
   const b = searchParams.getAll("b").map((e) => e.split("|"));
   const ma = searchParams.get("ma") || undefined;
-  const params = AgeParams.parse({ b, ma });
-  console.log(params);
+  const ls = searchParams.get("ls") || undefined;
+  const params = AgeParams.parse({ b, ma, ls });
 
   return (
     <React.Fragment>
@@ -84,6 +89,7 @@ export function AgeClockView() {
           color={p[1]}
           maxRadius={maxRadius}
           maxAge={params.ma}
+          labelSize={params.ls}
         />
       ))}
     </React.Fragment>
@@ -92,7 +98,7 @@ export function AgeClockView() {
 
 export function App() {
   const [windowDimensions, setWindowDimensions] = React.useState(
-    getWindowDimensions(),
+    getWindowDimensions()
   );
   const maxRadius =
     Math.min(windowDimensions.height, windowDimensions.width) / 2;

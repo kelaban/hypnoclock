@@ -10,12 +10,14 @@ export default function DailyClock({
   hourColor,
   secondColor,
   maxRadius,
+  labelSize,
 }: {
   unwind: boolean;
   maxRadius: number;
   minuteColor: string;
   hourColor: string;
   secondColor: string;
+  labelSize: number;
 }) {
   const [now, setNow] = React.useState<Date>(new Date());
   const seconds = d3.timeSecond.count(d3.timeDay.floor(now), now);
@@ -41,6 +43,7 @@ export default function DailyClock({
       maxRadius={maxRadius}
       unwind={unwind}
       valueFmt={(value) => zeroPad(Math.floor(value / 60) % 60)}
+      labelSize={labelSize}
     />
   );
   const HourHand = (
@@ -52,6 +55,7 @@ export default function DailyClock({
       maxRadius={maxRadius}
       unwind={unwind}
       valueFmt={(value) => zeroPad(Math.floor(value / 60) % 12)}
+      labelSize={labelSize}
     />
   );
   const SecondHand = (
@@ -64,6 +68,7 @@ export default function DailyClock({
       unwind={unwind}
       pathParams={{ strokeWidth: 0.5 }}
       valueFmt={(value) => zeroPad(value % 60)}
+      labelSize={labelSize}
     />
   );
 
