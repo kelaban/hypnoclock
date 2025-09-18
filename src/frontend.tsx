@@ -7,14 +7,14 @@
 
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { BrowserRouter, Route, Routes } from "react-router";
+import { BrowserRouter, HashRouter, Route, Routes } from "react-router";
 import { AgeClockView, App, DailyClockView, YearClockView } from "./App";
 import AgeClock from "./AgeClock";
 
 const elem = document.getElementById("root")!;
 const app = (
   <StrictMode>
-    <BrowserRouter>
+    <HashRouter>
       <Routes>
         <Route path="/" element={<App />}>
           <Route index element={<DailyClockView />} />
@@ -22,7 +22,7 @@ const app = (
           <Route path="age" element={<AgeClockView />} />
         </Route>
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   </StrictMode>
 );
 
