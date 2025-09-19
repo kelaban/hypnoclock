@@ -11,7 +11,7 @@ type SpiralHandT = {
   unwind?: boolean;
   pathParams?: React.SVGProps<SVGPathElement>;
   valueFmt?: (currentValue: number) => string;
-  rangeScale?: d3.ScaleContinuousNumeric<number, number>
+  rangeScale?: d3.ScaleContinuousNumeric<number, number>;
   labelSize?: number;
 };
 
@@ -25,8 +25,8 @@ export default function SpiralHand({
   unwind = false,
   pathParams = {},
   valueFmt = undefined,
-  // rangeScale = d3.scaleLinear(),
-  rangeScale = d3.scalePow().exponent(.3),
+  //rangeScale = d3.scaleLinear(),
+  rangeScale = d3.scalePow().exponent(0.6),
   labelSize = 25,
 }: SpiralHandT) {
   let maxUnits = rotationsPerDay * unitsPerRotation;
@@ -38,11 +38,14 @@ export default function SpiralHand({
     maxUnits /= 2;
   }
 
-  const angle = d3.scaleLinear()
+  const angle = d3
+    .scaleLinear()
     .range([0, 2 * Math.PI])
     .domain([0, unitsPerRotation]);
 
-  const radius = rangeScale.range([0, maxRadius - padding]).domain([0, maxUnits]);
+  const radius = rangeScale
+    .range([0, maxRadius - padding])
+    .domain([0, maxUnits]);
 
   const spiral = d3
     .lineRadial<undefined>()
